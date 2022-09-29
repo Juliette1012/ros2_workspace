@@ -1,86 +1,234 @@
-# VSCode ROS2 Workspace Template
+# VSCode template for ROS2 workspace
+Based on the template from Allison Thackston: https://github.com/athackst/vscode_ros2_workspace/tree/humble
 
-This template will get you set up using ROS2 with VSCode as your IDE.
 
-See [how I develop with vscode and ros2](https://www.allisonthackston.com/articles/vscode_docker_ros2.html) for a more in-depth look on how to use this workspace.
+## Workspace structure
+The ROS2 workspace directory should always look like the following:
 
-## Features
-
-### Style
-
-ROS2-approved formatters are included in the IDE.  
-
-* **c++** uncrustify; config from `ament_uncrustify`
-* **python** autopep8; vscode settings consistent with the [style guide](https://index.ros.org/doc/ros2/Contributing/Code-Style-Language-Versions/)
-
-### Tasks
-
-There are many pre-defined tasks, see [`.vscode/tasks.json`](.vscode/tasks.json) for a complete listing.  Feel free to adjust them to suit your needs.  
-
-Take a look at [how I develop using tasks](https://www.allisonthackston.com/articles/vscode_tasks.html) for an idea on how I use tasks in my development.
-
-### Debugging
-
-This template sets up debugging for python files and gdb for cpp programs.  See [`.vscode/launch.json`](.vscode/launch.json) for configuration details.
-
-### Continuous Integration
-
-The template also comes with basic continuous integration set up. See [`.github/workflows/ros.yaml`](/.github/workflows/ros.yaml).
-
-To remove a linter just delete it's name from this line:
-
-```yaml
-      matrix:
-          linter: [cppcheck, cpplint, uncrustify, lint_cmake, xmllint, flake8, pep257]
+```
+workspace
+|-- .devcontainer
+    |-- devcontainer.json       # properties of the develop container
+    |-- Dockerfile              # dockerfile which sets up the container workspace
+|-- .vscode
+    |-- c_cpp_properties.json   # C++ properties e.g. include paths and compiler
+    |-- launch.json             # launch actions for the environment
+    |-- settings.json           # VScode specific properties
+    |-- tasks.json              # task definitions which can be executed
+|-- build                       # build directory of all packages
+|-- install                     # installation directory of all packages
+|-- log                         # log files of all ROS2 run processes
+|-- src                         # contains all ROS2 packages
+    |-- package_1
+    |-- package_2
+    |-- package_n
+|-- .clang-format               # code formatting definitions
+|-- .clang-tidy                 # static code analysis properties and naming definitions
+|-- .cmake-format.yaml          # CMake formatting definitions
+|-- .gitignore                  # directories/files which will be ignored by git
+|-- .gitmodules                 # definitions of git submodules in the src directory
+|-- LICENSE                     # license information and example implementation
+|-- README.md                   # documentation description file for the repository
 ```
 
-## How to use this template
+## ROS2 package handling
 
-### Prerequisites
+⚡ Packages should always look as described in: https://code.siemens.com/simatic-systems-support/agv/package_template/-/tree/devel
 
-You should already have Docker and VSCode with the remote containers plugin installed on your system.
+To add an existing package git repository to the workspace open a terminal within the workspace directory and type in:
 
-* [docker](https://docs.docker.com/engine/install/)
+```
+# -f to force cloning -> needed because directory src/* is in .gitignore list
+git submodule add -f <URL> <directory> 
+
+# example: ROS2 template git package
+git submodule add -f git@code.siemens.com:simatic-systems-support/agv/package_template.git
+                     src/package_template
+
+# init and update the specified submodules
+git submodule init
+git submodule update --remote
+```
+
+
+## Further README links
+
+General topics:  
+[git](documentation/readme_git.md)  
+[docker](documentation/readme_docker.md)  
+[docker-compose](documentation/readme_docker_compose.md)  
+ 
+ROS2 in general:  
+[useful tools and helpers](documentation/readme_tools.md)  
+[colcon](documentation/readme_colcon.md)  
+[launch files](documentation/readme_launch_file.md)
+
+ROS2 packages:  
+[CMakeLists.txt](documentation/readme_cmake.md)  
+[package.xml](documentation/readme_package_xml.md)  
+[C++ header](documentation/readme_cpp_header.md)  
+[C++ source](documentation/readme_cpp_source.md)  
+[Python](documentation/readme_python.md)  
+[custom messages](documentation/readme_custom_messages.md)  
+
+
+## Prerequisites for VSCode setup
+
+Following programs need to be installed first:
+
+* [docker](https://docs.docker.com/desktop/linux/install/ubuntu/)
 * [vscode](https://code.visualstudio.com/)
 * [vscode remote containers plugin](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
-### Get the template
+## Useful VSCode extensions
+* [Docker from Microsoft](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
+* [Python from Microsoft](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+* [CMake Tools from Microsoft](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
+* [clangd from LLVM](https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd)
+* [Git Graph from mhutchie](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)
+* [ROS2 from nonanonno](https://marketplace.visualstudio.com/items?itemName=nonanonno.vscode-ros2)
 
-Click on "use this template"
 
-![template_use](https://user-images.githubusercontent.com/6098197/91331899-43f23b80-e780-11ea-92c8-b4665ce126f1.png)
+## First usage
+After cloning this template open VSCode inside the repository directory with the terminal command:
 
-### Create your repository
+```
+vscode .
+```
 
-On the next dialog, name the repository you would like to start and decide if you want all of the branches, or just the latest LTS: Foxy.
+Or open vscode manually and press:
 
-![template_new](https://user-images.githubusercontent.com/6098197/91332035-713ee980-e780-11ea-81d3-13b170f568b0.png)
+```
+CTRL + K
+CTRL + O
+```
+... and select the repository workspace folder.
 
-Github will then create a new repository with the contents of this one in your account.  It grabs the latest changes as "initial commit".
 
-### Clone your repo
+## Open workspace in a container
+After vscode has opened there should pop up a window on the bottom right:
+![image](documentation/pictures/reopen_in_container.png?raw=true)
 
-Now you can clone your repo as normal
 
-![template_download](https://user-images.githubusercontent.com/6098197/91332342-e4e0f680-e780-11ea-9525-49b0afa0e4bb.png)
+## Execute tasks
+To execute a task select "Terminal / Run Task..." or press:
+```
+CTRL + ALT + T
+```
+... a popup window shows all available tasks which can be selected e.g. to create a new ROS2 package:
+![image](documentation/pictures/execute_task.png?raw=true)
 
-### Open it in vscode
 
-Now that you've cloned your repo onto your computer, you can open it in VSCode (File->Open Folder). 
+## Clang-Format
 
-When you open it for the first time, you should see a little popup that asks you if you would like to open it in a container.  Say yes!
+The .clang-format file helps to specify formatting rules in the code: 
+https://clang.llvm.org/docs/ClangFormatStyleOptions.html  
+It is part of clangd, which is included in the devcontainer setup.  
+The automatic formatting of the active file can be triggered with the following command:
 
-![template_vscode](https://user-images.githubusercontent.com/6098197/91332551-36898100-e781-11ea-9080-729964373719.png)
+```
+CTRL + SHIFT + i
+```
 
-If you don't see the pop-up, click on the little green square in the bottom left corner, which should bring up the container dialog
+## Clang-Tidy
 
-![template_vscode_bottom](https://user-images.githubusercontent.com/6098197/91332638-5d47b780-e781-11ea-9fb6-4d134dbfc464.png)
+The .clang-tidy file specifies the static code analysis rules for the code: 
+https://clang.llvm.org/extra/clang-tidy/checks/readability-identifier-naming.html  
+It declares the naming conventions for e.g. variable or method naming and is also part of clangd.  
+Once the document is opened or saved all analysis errors are displayed like the following:
+![image](documentation/pictures/clang_tidy_popup.png?raw=true)
 
-In the dialog, select "Remote Containers: Reopen in container"
 
-VSCode will build the dockerfile inside of `.devcontainer` for you.  If you open a terminal inside VSCode (Terminal->New Terminal), you should see that your username has been changed to `ros`, and the bottom left green corner should say "Dev Container"
+## Useful tools
 
-![template_container](https://user-images.githubusercontent.com/6098197/91332895-adbf1500-e781-11ea-8afc-7a22a5340d4a.png)
+### terminator
+
+Program for visualising multiple terminal windows next to each other: https://github.com/gnome-terminator/terminator
+
+```
+terminator
+```
+
+### hotspot
+
+Performance analysis tool to help track down slow code:
+https://github.com/KDAB/hotspot
+
+```
+hotspot
+```
+
+### heaptrack
+
+Find and trace heap allocations in your code:
+https://github.com/KDE/heaptrack
+
+```
+heaptrack
+```
+
+### btop++
+
+Show all system information e.g. CPU & memory usage in a terminal:
+https://github.com/aristocratos/btop
+
+```
+btop
+```
+
+### PlotJuggler
+
+GUI tool to visualize ROS data:
+https://github.com/facontidavide/PlotJuggler
+
+```
+ros2 run plotjuggler plotjuggler
+```
+
+### rtui
+
+Terminal tool to visualize ROS data e.g. topics, nodes, services:
+https://github.com/eduidl/rtui
+
+```
+rtui topics
+rtui nodes
+rtui services
+rtui actions
+```
+
+### Groot
+
+GUI tool to edit and monitor behavior trees: 
+https://github.com/BehaviorTree/Groot  
+-> uses the BehaviorTree.CPP library: https://github.com/BehaviorTree/BehaviorTree.CPP
+
+```
+ros2 run groot Groot
+```
+
+## Additional information
+
+Slides from Davide Faconti regarding C++, behavior trees ...  
+https://slides.com/davidefaconti  
+
+C++ best practices from Jason Turner  
+https://github.com/cpp-best-practices/cppbestpractices  
+
+ROS2 documentation  
+https://docs.ros.org/en/humble/index.html
+
+ROS Enhancement Proposals (REPs)  
+https://ros.org/reps/rep-0000.html
+
+ROS2 API and message types (no humble API available yet)  
+https://docs.ros2.org/galactic/api
+
+ROS2 Navigation2 documentation  
+https://navigation.ros.org/index.html
+
+ROS related topics, announcements, discussions  
+https://discourse.ros.org/latest
 
 
 ### Update the template with your code

@@ -1,0 +1,26 @@
+[0.448s] Invoking command in '/workspaces/ros2_workspace/src/build/py_pubsub': PYTHONPATH=/workspaces/ros2_workspace/src/install/py_pubsub/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --prefix /workspaces/ros2_workspace/src/install/py_pubsub --editable --build-directory /workspaces/ros2_workspace/src/build/py_pubsub/build --no-deps install_data --install-dir /workspaces/ros2_workspace/src/install/py_pubsub
+[0.606s] running develop
+[0.699s] running egg_info
+[0.699s] creating py_pubsub.egg-info
+[0.699s] writing py_pubsub.egg-info/PKG-INFO
+[0.700s] writing dependency_links to py_pubsub.egg-info/dependency_links.txt
+[0.700s] writing entry points to py_pubsub.egg-info/entry_points.txt
+[0.700s] writing requirements to py_pubsub.egg-info/requires.txt
+[0.700s] writing top-level names to py_pubsub.egg-info/top_level.txt
+[0.701s] writing manifest file 'py_pubsub.egg-info/SOURCES.txt'
+[0.721s] reading manifest file 'py_pubsub.egg-info/SOURCES.txt'
+[0.721s] writing manifest file 'py_pubsub.egg-info/SOURCES.txt'
+[0.743s] running build_ext
+[0.743s] Creating /workspaces/ros2_workspace/src/install/py_pubsub/lib/python3.8/site-packages/site.py
+[0.744s] Creating /workspaces/ros2_workspace/src/install/py_pubsub/lib/python3.8/site-packages/py-pubsub.egg-link (link to .)
+[0.745s] Installing listener script to /workspaces/ros2_workspace/src/install/py_pubsub/lib/py_pubsub
+[0.745s] Installing talker script to /workspaces/ros2_workspace/src/install/py_pubsub/lib/py_pubsub
+[0.745s] 
+[0.745s] Installed /workspaces/ros2_workspace/src/build/py_pubsub
+[0.745s] running install_data
+[0.745s] creating /workspaces/ros2_workspace/src/install/py_pubsub/share/ament_index
+[0.745s] creating /workspaces/ros2_workspace/src/install/py_pubsub/share/ament_index/resource_index
+[0.745s] creating /workspaces/ros2_workspace/src/install/py_pubsub/share/ament_index/resource_index/packages
+[0.745s] copying resource/py_pubsub -> /workspaces/ros2_workspace/src/install/py_pubsub/share/ament_index/resource_index/packages
+[0.745s] copying package.xml -> /workspaces/ros2_workspace/src/install/py_pubsub/share/py_pubsub
+[0.763s] Invoked command in '/workspaces/ros2_workspace/src/build/py_pubsub' returned '0': PYTHONPATH=/workspaces/ros2_workspace/src/install/py_pubsub/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --prefix /workspaces/ros2_workspace/src/install/py_pubsub --editable --build-directory /workspaces/ros2_workspace/src/build/py_pubsub/build --no-deps install_data --install-dir /workspaces/ros2_workspace/src/install/py_pubsub

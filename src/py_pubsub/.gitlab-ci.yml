@@ -1,0 +1,67 @@
+# variables that are available to all execution tasks
+variables:
+    # test
+    ROS_WS: "/ros_ws"
+    # kaniko
+    http_proxy: "$CODE_PROXY"
+    HTTP_PROXY: "$CODE_PROXY"
+    https_proxy: "$CODE_PROXY"
+    HTTPS_PROXY: "$CODE_PROXY"
+    no_proxy: "127.0.0.1,localhost"
+    NO_PROXY: "127.0.0.1,localhost"
+
+# defne the pipeline stages that will be executed one after another
+# should normally be test -> build -> deploy 
+stages:
+    - build_and_test
+    - build_image
+
+
+# defines a job which is beeing executed
+build_and_test:
+    # to which stage this task is related
+    stage: build_and_test
+    # based on which docker image the task will be executed
+    image:
+        name: ros:foxy-ros-base
+    # the commands that will be executed in this task
+    before_script:
+        - mkdir -p $ROS_WS/src
+        - cp -a $CI_PROJECT_DIR/. $ROS_WS/src
+    script:
+        - cd $ROS_WS
+        - source /opt/ros/${ROS_DISTRO}/setup.bash
+        - colcon build --symlink-install --event-handlers console_direct+ --cmake-args -DCMAKE_BUILD_TYPE=Release
+        - ament_cppcheck src/
+        - ament_cpplint src/ --filter=-whitespace,-legal/copyright
+        - ament_flake8 src/
+        - ament_pep257 src/
+        - ament_lint_cmake src/ --filter=-whitespace
+        - ament_xmllint src/
+
+
+# defines a job which is beeing executed
+build_docker_image:
+    # to which stage this task is related
+    stage: build_image
+    # based on which docker image the task will be executed
+    image:
+        name: gcr.io/kaniko-project/executor:debug
+        entrypoint: [""]
+    # the commands that will be executed in this task
+    script:
+        - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+        - >
+          /kaniko/executor \
+            --context $CI_PROJECT_DIR \
+            --dockerfile $CI_PROJECT_DIR/Dockerfile \
+            --destination $CI_REGISTRY_IMAGE:latest \
+            --build-arg http_proxy=$http_proxy \
+            --build-arg HTTP_PROXY=$HTTP_PROXY \
+            --build-arg https_proxy=$https_proxy \
+            --build-arg HTTPS_PROXY=$HTTPS_PROXY \
+            --build-arg no_proxy=$no_proxy \
+            --build-arg NO_PROXY=$NO_PROXY
+    # define tags at which the task will be available
+    tags:
+        - DOCKER
