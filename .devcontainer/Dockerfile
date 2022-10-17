@@ -15,21 +15,19 @@ RUN apt-get update \
         && apt-get upgrade -y \
         && apt-get install -y apt-utils \
         software-properties-common \
-        git \
+        git \
         vim \
         nano \
-        nodejs
+        nodejs \ 
+        openssh-client
 
 # set up robot workspace
 RUN mkdir -p /home/ros_ws
 WORKDIR /home/ros_ws
-RUN git clone git@github.com:Juliette1012/ros2_workspace.git \
-        git checkout foxy 
+RUN git clone -b foxy https://github.com/Juliette1012/ros2_workspace.git
 
 # build the ROS2 workspace
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
         && colcon build --symlink-install
 # write source commands to .bashrc -> no need to source afterwards
 RUN echo "source /home/ros_ws/install/setup.bash" >> ~/.bashrc
-
-CMD ros2 run py_pubsub talker
