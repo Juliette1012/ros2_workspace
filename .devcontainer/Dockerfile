@@ -265,8 +265,3 @@ ENV ROS_DOMAIN_ID=0
 
 # switch to interactive user mode
 ENV DEBIAN_FRONTEND=dialog
-
-##################################################################
-# ROS 2 packages
-##################################################################
-#RUN git clone 
